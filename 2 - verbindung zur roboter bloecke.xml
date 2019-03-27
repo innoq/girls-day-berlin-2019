@@ -1,0 +1,76 @@
+<blocks app="Snap4Arduino 1.2.7
+, http://snap4arduino.rocks" version="1"><block-definition s="motor links hat Steckplaetze D %&apos;PIN1&apos; D %&apos;PIN2&apos; D %&apos;PIN3&apos; D %&apos;PIN4&apos;" type="command" category="arduino"><header></header><code>int motor_links[4] = {&lt;#4&gt;, &lt;#3&gt;, &lt;#2&gt;, &lt;#1&gt;};&#xD;&#xD;void bereite_motor_links_vor() {&#xD;  pinMode(motor_links[0], OUTPUT);&#xD;  pinMode(motor_links[1], OUTPUT);&#xD;  pinMode(motor_links[2], OUTPUT);&#xD;  pinMode(motor_links[3], OUTPUT);&#xD;}</code><translations></translations><inputs><input type="%n" readonly="true">0<options>2
+3
+4
+5
+6
+7
+8
+9
+10
+11</options></input><input type="%n" readonly="true">0<options>2
+3
+4
+5
+6
+7
+8
+9
+10
+11</options></input><input type="%n" readonly="true">0<options>2
+3
+4
+5
+6
+7
+8
+9
+10
+11</options></input><input type="%n" readonly="true">0<options>2
+3
+4
+5
+6
+7
+8
+9
+10
+11</options></input></inputs><script><block s="doSetVar"><l>motor_links</l><block s="reportNewList"><list><block var="PIN4"/><block var="PIN3"/><block var="PIN2"/><block var="PIN1"/></list></block></block></script></block-definition><block-definition s="Hauptprogramm %&apos;Hauptprogramm&apos;" type="command" category="arduino"><header></header><code>#include &lt;Servo.h&gt;&#xD;Servo servo;&#xD;#define STIFT_OBEN 90&#xD;#define STIFT_UNTEN 0&#xD;&#xD;int geschwindigkeit = 300;&#xD;float schritte_pro_grad = 2.985;&#xD;int schrittlaenge = 50;&#xD;int delay_duration = 5;&#xD;int schritte = 0;&#xD;int grad = 0;&#xD;&#xD;void setup() {&#xD;  bereite_motor_rechts_vor();&#xD;  bereite_motor_links_vor();&#xD;  pinMode(LED_BUILTIN, OUTPUT);&#xD;  Serial.begin(9600);&#xD;  servo.attach(servoPin);&#xD;}&#xD;&#xD;void vorwaerts() {&#xD;  bewegen(motor_rechts, motor_links);&#xD;}&#xD;&#xD;void rueckwaerts() {&#xD;  bewegen(motor_links, motor_rechts);&#xD;}&#xD;&#xD;void setze_motor_pins(int motor[4], int pin_0, int pin_1, int pin_2, int pin_3) {&#xD;  digitalWrite(motor[0], pin_0 ? HIGH : LOW);&#xD;  digitalWrite(motor[1], pin_1 ? HIGH : LOW);&#xD;  digitalWrite(motor[2], pin_2 ? HIGH : LOW);&#xD;  digitalWrite(motor[3], pin_3 ? HIGH : LOW);&#xD;}&#xD;&#xD;void bewegen(int motor1[4], int motor2[4]) {&#xD;  ///////////////////////////// 1&#xD;  setze_motor_pins(motor1, true, false, false, false);&#xD;  setze_motor_pins(motor2, false, false, false, true);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 2&#xD;  setze_motor_pins(motor1, false, true, false, false);&#xD;  setze_motor_pins(motor2, false, false, true, false);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 3&#xD;  setze_motor_pins(motor1, false, false, true, false);&#xD;  setze_motor_pins(motor2, false, true, false, false);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 4&#xD;  setze_motor_pins(motor1, false, false, false, true);&#xD;  setze_motor_pins(motor2, true, false, false, false);&#xD;&#xD;  delay(delay_duration);&#xD;}&#xD;&#xD;void rechts_drehen() {&#xD;  ///////////////////////////// 1&#xD;  setze_motor_pins(motor_rechts, false, false, false, true);&#xD;  setze_motor_pins(motor_links, false, false, false, true);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 2&#xD;  setze_motor_pins(motor_rechts, false, false, true, false);&#xD;  setze_motor_pins(motor_links, false, false, true, false);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 3&#xD;  setze_motor_pins(motor_rechts, false, true, false, false);&#xD;  setze_motor_pins(motor_links, false, true, false, false);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 4&#xD;  setze_motor_pins(motor_rechts, true, false, false, false);&#xD;  setze_motor_pins(motor_links, true, false, false, false);&#xD;  delay(delay_duration);&#xD;}&#xD;&#xD;void links_drehen() {&#xD;  ///////////////////////////// 1&#xD;  setze_motor_pins(motor_rechts, true, false, false, false);&#xD;  setze_motor_pins(motor_links, true, false, false, false);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 2&#xD;  setze_motor_pins(motor_rechts, false, true, false, false);&#xD;  setze_motor_pins(motor_links, false, true, false, false);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 3&#xD;  setze_motor_pins(motor_rechts, false, false, true, false);&#xD;  setze_motor_pins(motor_links, false, false, true, false);&#xD;  delay(delay_duration);&#xD;&#xD;  ///////////////////////////// 4&#xD;  setze_motor_pins(motor_rechts, false, false, false, true);&#xD;  setze_motor_pins(motor_links, false, false, false, true);&#xD;  delay(delay_duration);&#xD;}&#xD;&#xD;void start_signal() {&#xD;  Serial.print(&quot;Starte in zwei Sekunden ... &quot;);&#xD;  for(int i=0;i&lt;8; i++) {&#xD;    digitalWrite(LED_BUILTIN, HIGH);&#xD;    delay(125);&#xD;    digitalWrite(LED_BUILTIN, LOW);&#xD;    delay(125);&#xD;  }&#xD;  Serial.print(&quot;los gehts\n&quot;);&#xD;}&#xD;&#xD;void ende_signal() {&#xD;  if(Serial) {&#xD;    Serial.print(&quot;fertig!\n&quot;);&#xD;  }&#xD;  for(;;) {&#xD;    digitalWrite(LED_BUILTIN, HIGH);&#xD;    delay(300);&#xD;    digitalWrite(LED_BUILTIN, LOW);&#xD;    delay(300);&#xD;  }&#xD;}&#xD;&#xD;void stift_hoch() {&#xD;  delay(300);&#xD;  servo.write(STIFT_OBEN);&#xD;}&#xD;&#xD;void stift_runter() {&#xD;  servo.write(STIFT_UNTEN);&#xD;  delay(300);&#xD;}&#xD;&#xD;&#xD;bool running = false;&#xD;void loop() {&#xD;  servo.write(STIFT_OBEN);&#xD;  if(!running) {&#xD;    running = true;&#xD;    start_signal();&#xD;    delay_duration = ((1.0/(1.0*geschwindigkeit))*1000.0)*1;&#xD;    &lt;#1&gt;&#xD;    ende_signal();&#xD;  }&#xD;}&#xD;</code><translations></translations><inputs><input type="%cs"></input></inputs><script><block s="up"></block><block s="gotoXY"><l>0</l><l>0</l></block><block s="setHeading"><l>0</l></block><block s="clear"></block><block s="doForever"><script><block s="doRun"><block var="Hauptprogramm"/><list></list></block><block s="doStopThis"><l><option>all</option></l></block></script></block></script></block-definition><block-definition s="stifteheber hat Steckplatz D %&apos;pin&apos;" type="command" category="arduino"><header></header><code>int servoPin = &lt;#1&gt;;</code><translations></translations><inputs><input type="%n"><options>2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12</options></input></inputs><script><block s="doSetVar"><l>stiftheben_servo</l><block var="pin"/></block></script></block-definition><block-definition s="motor rechts hat steckplaetze A %&apos;pin1&apos; A %&apos;pin2&apos; A %&apos;pin3&apos; A %&apos;pin4&apos;" type="command" category="arduino"><header></header><code>int motor_rechts[4] = {&lt;#1&gt; + 14, &lt;#2&gt; + 14, &lt;#3&gt; + 14, &lt;#4&gt; + 14};&#xD;&#xD;void bereite_motor_rechts_vor() {&#xD;  pinMode(motor_rechts[0], OUTPUT);&#xD;  pinMode(motor_rechts[1], OUTPUT);&#xD;  pinMode(motor_rechts[2], OUTPUT);&#xD;  pinMode(motor_rechts[3], OUTPUT);&#xD;}</code><translations></translations><inputs><input type="%n" readonly="true">0<options>0
+1
+2
+3
+4
+5
+6
+7</options></input><input type="%n" readonly="true">0<options>0
+1
+2
+3
+4
+5
+6
+7</options></input><input type="%n" readonly="true">0<options>0
+1
+2
+3
+4
+5
+6
+7</options></input><input type="%n" readonly="true">0<options>0
+1
+2
+3
+4
+5
+6
+7</options></input></inputs><script><block s="doSetVar"><l>motor_rechts</l><block s="reportNewList"><list><block s="reportSum"><block var="pin1"/><l>14</l></block><block s="reportSum"><block var="pin2"/><l>14</l></block><block s="reportSum"><block var="pin3"/><l>14</l></block><block s="reportSum"><block var="pin4"/><l>14</l></block></list></block></block></script></block-definition><block-definition s="Roboter konfigurieren" type="command" category="arduino"><header></header><code></code><translations></translations><inputs></inputs><script><block s="gotoXY"><l>-200</l><l>0</l></block><block s="doSetVar"><l>schritte</l><l>2</l></block><block s="doSetVar"><l>schritte_pro_grad</l><l>2.98</l></block><block s="doSetVar"><l>schrittlaenge</l><l>20</l></block><block s="doSetVar"><l>geschwindigkeit</l><l>300</l></block></script></block-definition><block-definition s="Code generieren %&apos;programm&apos;" type="command" category="arduino"><header></header><code></code><translations></translations><inputs><input type="%cmdRing"></input></inputs><script><block s="doShowVar"><l>code</l></block><block s="doSetVar"><l>code</l><block s="reportMappedCode"><block var="programm"/></block></block><block s="doWait"><l>10</l></block><block s="doHideVar"><l>code</l></block></script></block-definition></blocks>
